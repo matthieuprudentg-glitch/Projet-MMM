@@ -5,7 +5,7 @@
     try{
         $user = "root";
         $pass = "root";
-        $bdd = new PDO("mysql:host=xampp_mariadb;dbname=mmm_tournois", $user, $pass);
+        $bdd = new PDO("mysql:host=xampp_mariadb;dbname=PPE", $user, $pass);
     
     } catch (PDOException $e) {
         print "Erreur !:" . $e->getMessage();
