@@ -1,20 +1,3 @@
-<?php
-include('model/utilisateur.php');
-include('model/mouvementCredit.php');
-
-$modelUtilisateur = new Utilisateur();
-$modelMouvement = new MouvementCredit();
-
-// Donnees affichees sur la page profil
-$joueur = $modelUtilisateur->selectProfil();
-if (isset($_SESSION['solde_credits'])) {
-    $joueur['credits'] = $_SESSION['solde_credits'];
-}
-$prochainsTournois = $modelUtilisateur->selectProchainsTournois();
-$tournoisCrees = $modelUtilisateur->selectTournoisCrees();
-$historique = $modelMouvement->selectHistorique();
-?>
-
 <!-- Page profil joueur -->
 <div class="max-w-container mx-auto px-8 py-12">
 
@@ -30,13 +13,11 @@ $historique = $modelMouvement->selectHistorique();
                 </div>
                 <div>
                     <h1 class="font-condensed font-bold uppercase text-ink leading-none mb-3 text-6xl">
-                        <?= htmlspecialchars($joueur['pseudo']) ?>
+                        Pseudo du joueur
                     </h1>
                     <div class="flex gap-2 flex-wrap">
                         <?php $texte = 'JOUEUR'; $type = 'encre'; include('view/commun/badge.php'); ?>
-                        <?php if ($joueur['est_createur']) { ?>
-                            <?php $texte = 'CREATEUR DE TOURNOI'; $type = 'contour'; include('view/commun/badge.php'); ?>
-                        <?php } ?>
+                        <?php $texte = 'CREATEUR DE TOURNOI'; $type = 'contour'; include('view/commun/badge.php'); ?>
                     </div>
                 </div>
             </div>
@@ -47,7 +28,7 @@ $historique = $modelMouvement->selectHistorique();
             <div class="border-2 border-primary p-5 shadow-hard-blue h-full flex flex-col justify-between">
                 <div>
                     <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">SOLDE DE CREDITS</div>
-                    <div class="font-condensed font-bold text-ink leading-none text-title-1"><?= (int)$joueur['credits'] ?></div>
+                    <div class="font-condensed font-bold text-ink leading-none text-title-1">120</div>
                     <div class="font-mono text-xs text-muted uppercase mb-4">CREDITS</div>
                 </div>
                 <a href="index.php?page=credits" class="block w-full text-center font-condensed font-bold text-sm uppercase bg-accent text-ink py-3 shadow-hard-yellow hover:bg-accent-light">
@@ -58,22 +39,24 @@ $historique = $modelMouvement->selectHistorique();
 
     </div>
 
-    <!-- Bande stats 4 colonnes -->
+    <!-- Tableau des statistiques personnelles du joueur (donnees factices) -->
     <div class="grid grid-cols-2 md:grid-cols-4 border border-primary mb-10">
-        <?php
-        $statsJoueur = [
-            ['label' => 'TOURNOIS JOUES', 'valeur' => $joueur['tournois_joues']],
-            ['label' => 'VICTOIRES',       'valeur' => $joueur['victoires']],
-            ['label' => 'CLASSEMENT',      'valeur' => '#' . $joueur['classement']],
-            ['label' => 'TOURNOIS CREES',  'valeur' => $joueur['tournois_crees']],
-        ];
-        foreach ($statsJoueur as $i => $s) {
-        ?>
-        <div class="p-5 <?= $i < 3 ? 'border-r border-primary' : '' ?> <?= $i >= 2 ? 'border-t md:border-t-0 border-primary' : '' ?>">
-            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1"><?= $s['label'] ?></div>
-            <div class="font-condensed text-5xl font-bold text-ink leading-none"><?= $s['valeur'] ?></div>
+        <div class="p-5 border-r border-primary">
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">TOURNOIS JOUES</div>
+            <div class="font-condensed text-5xl font-bold text-ink leading-none">12</div>
         </div>
-        <?php } ?>
+        <div class="p-5 border-r border-primary">
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">VICTOIRES</div>
+            <div class="font-condensed text-5xl font-bold text-ink leading-none">4</div>
+        </div>
+        <div class="p-5 border-r border-primary border-t md:border-t-0">
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">CLASSEMENT</div>
+            <div class="font-condensed text-5xl font-bold text-ink leading-none">#38</div>
+        </div>
+        <div class="p-5 border-t md:border-t-0 border-primary">
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">TOURNOIS CREES</div>
+            <div class="font-condensed text-5xl font-bold text-ink leading-none">2</div>
+        </div>
     </div>
 
     <!-- Tableau de bord -->
@@ -84,118 +67,139 @@ $historique = $modelMouvement->selectHistorique();
         <!-- Menu lateral -->
         <div class="col-span-12 md:col-span-3">
             <div class="border border-primary shadow-hard-blue">
-                <?php
-                $menuItems = [
-                    ['label' => 'APERCU',          'actif' => true],
-                    ['label' => 'MES TOURNOIS',    'actif' => false],
-                    ['label' => 'MES CREDITS',     'actif' => false],
-                    ['label' => 'PARAMETRES',      'actif' => false],
-                    ['label' => 'DECONNEXION',     'actif' => false],
-                ];
-                foreach ($menuItems as $item) {
-                ?>
-                <div class="px-5 py-4 font-condensed font-bold text-sm uppercase cursor-pointer border-b border-primary last:border-b-0 tracking-wide <?= $item['actif'] ? 'bg-accent text-ink' : 'text-ink hover:bg-pale' ?>">
-                    <?= htmlspecialchars($item['label']) ?>
+                <div class="px-5 py-4 font-condensed font-bold text-sm uppercase cursor-pointer border-b border-primary tracking-wide bg-accent text-ink">
+                    APERCU
                 </div>
-                <?php } ?>
+                <div class="px-5 py-4 font-condensed font-bold text-sm uppercase cursor-pointer border-b border-primary tracking-wide text-ink hover:bg-pale">
+                    MES TOURNOIS
+                </div>
+                <div class="px-5 py-4 font-condensed font-bold text-sm uppercase cursor-pointer border-b border-primary tracking-wide text-ink hover:bg-pale">
+                    MES CREDITS
+                </div>
+                <div class="px-5 py-4 font-condensed font-bold text-sm uppercase cursor-pointer border-b border-primary tracking-wide text-ink hover:bg-pale">
+                    PARAMETRES
+                </div>
+                <div class="px-5 py-4 font-condensed font-bold text-sm uppercase cursor-pointer tracking-wide text-ink hover:bg-pale">
+                    DECONNEXION
+                </div>
             </div>
         </div>
 
         <!-- Contenu principal -->
         <div class="col-span-12 md:col-span-9 space-y-6">
 
-            <!-- Prochains tournois -->
+            <!-- Prochains tournois : donnees factices a remplacer plus tard par la BDD -->
             <div class="border border-primary shadow-hard-blue">
                 <div class="px-5 py-3 border-b border-primary bg-pale">
                     <span class="font-mono text-xs text-primary uppercase tracking-widest">PROCHAINS TOURNOIS</span>
                 </div>
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-primary">
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">TOURNOI</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">DATE</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">STATUT</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">COUT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($prochainsTournois as $pt) { ?>
-                        <tr class="border-b border-primary last:border-b-0 hover:bg-pale">
-                            <td class="px-5 py-3 font-condensed font-bold text-ink text-lg"><?= htmlspecialchars($pt['tournoi']) ?></td>
-                            <td class="px-5 py-3 font-mono text-xs text-ink"><?= htmlspecialchars($pt['date']) ?></td>
-                            <td class="px-5 py-3 font-mono text-xs text-muted"><?= htmlspecialchars($pt['statut']) ?></td>
-                            <td class="px-5 py-3 font-mono text-xs text-ink"><?= (int)$pt['cout'] ?> credits</td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <!-- Tableau des inscriptions aux prochains tournois -->
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-primary">
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">TOURNOI</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">DATE</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">STATUT</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">COUT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-primary hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">Street Fighter</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">14.12.2026</td>
+                                <td class="px-5 py-3 font-mono text-xs text-muted">Inscrit</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">120 credits</td>
+                            </tr>
+                            <tr class="border-b border-primary hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">GTA VI</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">20.12.2026</td>
+                                <td class="px-5 py-3 font-mono text-xs text-muted">Inscrit</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">80 credits</td>
+                            </tr>
+                            <tr class="hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">Mega Man</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">18.01.2027</td>
+                                <td class="px-5 py-3 font-mono text-xs text-muted">En attente</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">40 credits</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Mes tournois crees -->
+            <!-- Mes tournois crees : donnees factices a remplacer plus tard par la BDD -->
             <div class="border border-primary shadow-hard-blue">
                 <div class="px-5 py-3 border-b border-primary bg-pale">
                     <span class="font-mono text-xs text-primary uppercase tracking-widest">MES TOURNOIS CREES</span>
                 </div>
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-primary">
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">NOM</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">DATE</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">PARTICIPANTS</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">STATUT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($tournoisCrees as $tc) { ?>
-                        <tr class="border-b border-primary last:border-b-0 hover:bg-pale">
-                            <td class="px-5 py-3 font-condensed font-bold text-ink text-lg"><?= htmlspecialchars($tc['nom']) ?></td>
-                            <td class="px-5 py-3 font-mono text-xs text-ink"><?= htmlspecialchars($tc['date']) ?></td>
-                            <td class="px-5 py-3 font-mono text-xs text-ink"><?= htmlspecialchars($tc['participants']) ?></td>
-                            <td class="px-5 py-3">
-                                <?php
-                                $typeBadge = $tc['statut'] === 'Complet' ? 'encre' : 'jaune';
-                                $texte = strtoupper($tc['statut']); $type = $typeBadge;
-                                include('view/commun/badge.php');
-                                ?>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <!-- Tableau des tournois organises par le joueur -->
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-primary">
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">NOM</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">DATE</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">PARTICIPANTS</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">STATUT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-primary hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">Tournoi entre amis</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">10.12.2026</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">8 / 16</td>
+                                <td class="px-5 py-3">
+                                    <?php $texte = 'OUVERT'; $type = 'jaune'; include('view/commun/badge.php'); ?>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">Soiree Resident Evil</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">02.01.2027</td>
+                                <td class="px-5 py-3 font-mono text-xs text-ink">16 / 16</td>
+                                <td class="px-5 py-3">
+                                    <?php $texte = 'COMPLET'; $type = 'encre'; include('view/commun/badge.php'); ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Historique des credits -->
+            <!-- Historique des credits : donnees factices a remplacer plus tard par la BDD -->
             <div class="border border-primary shadow-hard-blue">
                 <div class="px-5 py-3 border-b border-primary bg-pale">
                     <span class="font-mono text-xs text-primary uppercase tracking-widest">HISTORIQUE DES CREDITS</span>
                 </div>
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-primary">
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">DATE</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">OPERATION</th>
-                            <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">MONTANT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($historique as $h) { ?>
-                        <?php
-                        // Un montant qui commence par "+" est un gain (vert), sinon c'est une depense (rouge)
-                        $couleurMontant = 'text-danger';
-                        if (substr($h['montant'], 0, 1) == '+') {
-                            $couleurMontant = 'text-success';
-                        }
-                        ?>
-                        <tr class="border-b border-primary last:border-b-0 hover:bg-pale">
-                            <td class="px-5 py-3 font-condensed font-bold text-ink text-lg"><?= htmlspecialchars($h['date']) ?></td>
-                            <td class="px-5 py-3 text-sm text-ink"><?= htmlspecialchars($h['operation']) ?></td>
-                            <td class="px-5 py-3 font-condensed font-bold text-xl <?= $couleurMontant ?>">
-                                <?= htmlspecialchars($h['montant']) ?>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <!-- Tableau des mouvements de credits (gains en vert, depenses en rouge) -->
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-primary">
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">DATE</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">OPERATION</th>
+                                <th class="text-left px-5 py-2 font-mono text-xs text-muted uppercase tracking-widest">MONTANT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-primary last:border-b-0 hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">02.12.2026</td>
+                                <td class="px-5 py-3 text-sm text-ink">Achat de 200 credits</td>
+                                <td class="px-5 py-3 font-condensed font-bold text-xl text-success">+200</td>
+                            </tr>
+                            <tr class="border-b border-primary last:border-b-0 hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">03.12.2026</td>
+                                <td class="px-5 py-3 text-sm text-ink">Inscription Street Fighter</td>
+                                <td class="px-5 py-3 font-condensed font-bold text-xl text-danger">-120</td>
+                            </tr>
+                            <tr class="border-b border-primary last:border-b-0 hover:bg-pale">
+                                <td class="px-5 py-3 font-condensed font-bold text-ink text-lg">06.12.2026</td>
+                                <td class="px-5 py-3 text-sm text-ink">Gain de tournoi</td>
+                                <td class="px-5 py-3 font-condensed font-bold text-xl text-success">+40</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>

@@ -1,34 +1,26 @@
 <?php
-// Page demandee dans l'URL (accueil par defaut)
-$page = isset($_GET['page']) ? $_GET['page'] : 'accueil';
-
-// Titre de l'onglet du navigateur pour chaque page
-$titres = [
-    'accueil'      => 'Accueil',
-    'connexion'    => 'Connexion et Inscription',
-    'tournois'     => 'Catalogue des Tournois',
-    'profil'       => 'Mon Profil',
-    'credits'      => 'Acheter des Credits',
-    'partenaires'  => 'Nos Partenaires',
-];
-
-// Texte du fil d'Ariane pour chaque page
-$filsAriane = [
-    'accueil'      => '01 / TOURNOI A LA UNE',
-    'connexion'    => '01 / ACCES AU COMPTE',
-    'tournois'     => 'ACCUEIL / CATALOGUE DES TOURNOIS',
-    'profil'       => '01 / ESPACE JOUEUR',
-    'credits'      => '01 / BOUTIQUE DE CREDITS',
-    'partenaires'  => '01 / RESEAU ET PARTENAIRES OFFICIELS',
-];
-
-// Si la page n'existe pas, on affiche l'accueil
-if (!isset($titres[$page])) {
-    $page = 'accueil';
+// Titre selon la page (definie dans index.php)
+switch ($page) {
+    case 'connexion':
+        $titrePage = 'Connexion et Inscription';
+        break;
+    case 'tournois':
+        $titrePage = 'Catalogue des Tournois';
+        break;
+    case 'profil':
+        $titrePage = 'Mon Profil';
+        break;
+    case 'credits':
+        $titrePage = 'Acheter des Credits';
+        break;
+    case 'partenaires':
+        $titrePage = 'Nos Partenaires';
+        break;
+    default:
+        $page = 'accueil';
+        $titrePage = 'Accueil';
+        break;
 }
-
-$titrePage = $titres[$page];
-$filAriane = $filsAriane[$page];
 
 // Sur l'accueil et la connexion, on affiche les boutons "visiteur"
 $estVisiteur = ($page === 'accueil' || $page === 'connexion');
@@ -151,14 +143,6 @@ $estVisiteur = ($page === 'accueil' || $page === 'connexion');
         <a href="index.php?page=credits" class="font-mono text-xs uppercase tracking-widest <?= $page === 'credits' ? 'text-primary font-bold' : 'text-ink' ?>">Credits</a>
     </div>
 </header>
-
-<!-- Fil d'Ariane -->
-<div class="border-b border-primary">
-    <div class="max-w-container mx-auto px-8 py-3 flex items-center gap-4">
-        <span class="font-mono text-xs text-muted uppercase tracking-widest flex-shrink-0"><?= $filAriane ?></span>
-        <div class="flex-1 h-px bg-primary"></div>
-    </div>
-</div>
 
 <!-- CONTENU PRINCIPAL -->
 <main class="flex-1">

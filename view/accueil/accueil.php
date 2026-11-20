@@ -1,11 +1,3 @@
-<?php
-// Les 3 tournois affiches dans la section "Tournois a la une"
-include('model/tournoi.php');
-
-$modelTournoi = new Tournoi();
-$tournoisMis = $modelTournoi->selectALaUne();
-?>
-
 <!-- Page d'accueil -->
 
 <!-- ===== SECTION 01 : TOURNOI A LA UNE ===== -->
@@ -43,16 +35,29 @@ $tournoisMis = $modelTournoi->selectALaUne();
                     </p>
                 </div>
 
-                <!-- Cases d'information 2x2 -->
-                <?php
-                $cases = [
-                    ['label' => 'DATE',         'valeur' => '14.12.2026', 'detail' => '14:00 CET'],
-                    ['label' => 'FORMAT',       'valeur' => 'ELIMINATION', 'detail' => '32 JOUEURS'],
-                    ['label' => 'INSCRIPTIONS', 'valeur' => "JUSQU'AU 10.12", 'detail' => 'CLOTURE LE 10 DEC.'],
-                    ['label' => 'COUT',         'valeur' => '120 CREDITS', 'detail' => 'PAR JOUEUR'],
-                ];
-                include('view/commun/case_info.php');
-                ?>
+                <!-- Tableau 2x2 des informations du tournoi a la une (donnees factices) -->
+                <div class="grid grid-cols-2 border border-primary bg-offwhite bg-opacity-95">
+                    <div class="p-4 border-r border-primary border-b border-primary">
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">DATE</div>
+                        <div class="font-condensed text-2xl font-bold text-ink uppercase leading-tight">14.12.2026</div>
+                        <div class="font-mono text-xs text-muted mt-1 uppercase">14:00 CET</div>
+                    </div>
+                    <div class="p-4 border-b border-primary">
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">FORMAT</div>
+                        <div class="font-condensed text-2xl font-bold text-ink uppercase leading-tight">ELIMINATION</div>
+                        <div class="font-mono text-xs text-muted mt-1 uppercase">32 JOUEURS</div>
+                    </div>
+                    <div class="p-4 border-r border-primary">
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">INSCRIPTIONS</div>
+                        <div class="font-condensed text-2xl font-bold text-ink uppercase leading-tight">JUSQU'AU 10.12</div>
+                        <div class="font-mono text-xs text-muted mt-1 uppercase">CLOTURE LE 10 DEC.</div>
+                    </div>
+                    <div class="p-4">
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">COUT</div>
+                        <div class="font-condensed text-2xl font-bold text-ink uppercase leading-tight">120 CREDITS</div>
+                        <div class="font-mono text-xs text-muted mt-1 uppercase">PAR JOUEUR</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Boutons CTA -->
@@ -127,21 +132,23 @@ $tournoisMis = $modelTournoi->selectALaUne();
 <section class="bg-pale border-y border-primary py-12">
     <div class="max-w-container mx-auto px-8">
         <?php $num = '02'; $titre = 'COMMENT CA MARCHE'; $ref = 'REF : ETT-02'; include('view/commun/titre_section.php'); ?>
+        <!-- Grille des 3 etapes de fonctionnement -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <?php
-            $etapes = [
-                ['num' => '01', 'titre' => 'INSCRIS-TOI',        'texte' => "Cree ton compte gratuitement et recharge tes credits. Acces rapide en 2 minutes."],
-                ['num' => '02', 'titre' => 'CHOISIS TON TOURNOI', 'texte' => "Filtre par jeu, date ou prix et reserve ta place. Paiement en credits uniquement."],
-                ['num' => '03', 'titre' => 'JOUE ET PROGRESSE',  'texte' => "Affronte les autres joueurs et grimpe au classement. Les vainqueurs remportent des credits."],
-            ];
-            foreach ($etapes as $e) {
-            ?>
             <div class="border border-primary p-6 bg-offwhite shadow-hard-blue">
-                <div class="font-condensed text-6xl font-bold text-primary mb-3 leading-none"><?= $e['num'] ?></div>
-                <h3 class="font-condensed text-2xl font-bold text-ink uppercase mb-3 leading-tight"><?= $e['titre'] ?></h3>
-                <p class="text-sm text-muted leading-relaxed"><?= $e['texte'] ?></p>
+                <div class="font-condensed text-6xl font-bold text-primary mb-3 leading-none">01</div>
+                <h3 class="font-condensed text-2xl font-bold text-ink uppercase mb-3 leading-tight">INSCRIS-TOI</h3>
+                <p class="text-sm text-muted leading-relaxed">Cree ton compte gratuitement et recharge tes credits. Acces rapide en 2 minutes.</p>
             </div>
-            <?php } ?>
+            <div class="border border-primary p-6 bg-offwhite shadow-hard-blue">
+                <div class="font-condensed text-6xl font-bold text-primary mb-3 leading-none">02</div>
+                <h3 class="font-condensed text-2xl font-bold text-ink uppercase mb-3 leading-tight">CHOISIS TON TOURNOI</h3>
+                <p class="text-sm text-muted leading-relaxed">Filtre par jeu, date ou prix et reserve ta place. Paiement en credits uniquement.</p>
+            </div>
+            <div class="border border-primary p-6 bg-offwhite shadow-hard-blue">
+                <div class="font-condensed text-6xl font-bold text-primary mb-3 leading-none">03</div>
+                <h3 class="font-condensed text-2xl font-bold text-ink uppercase mb-3 leading-tight">JOUE ET PROGRESSE</h3>
+                <p class="text-sm text-muted leading-relaxed">Affronte les autres joueurs et grimpe au classement. Les vainqueurs remportent des credits.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -149,108 +156,131 @@ $tournoisMis = $modelTournoi->selectALaUne();
 <!-- ===== SECTION 03 : TOURNOIS A LA UNE ===== -->
 <section class="max-w-container mx-auto px-8 py-12">
     <?php $num = '03'; $titre = 'TOURNOIS A LA UNE'; $ref = 'REF : TRL-03'; include('view/commun/titre_section.php'); ?>
+    <!-- Grille des 3 tournois a la une (donnees factices a remplacer par la BDD) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <?php foreach ($tournoisMis as $t) { ?>
-        <?php
-        // Couleurs de la carte selon la categorie du tournoi
-        $hasImg = !empty($t['img']) && file_exists($t['img']);
-        if ($t['couleur_carte'] === 'jaune') {
-            $fondBanniere = 'bg-accent';
-            $badgeStt = 'bg-primary text-white border border-primary';
-            $btnCTA   = 'bg-primary text-white shadow-hard-ink hover:bg-primary-light';
-        } elseif ($t['couleur_carte'] === 'bleu') {
-            $fondBanniere = 'bg-primary';
-            $badgeStt = 'bg-accent text-ink border border-accent';
-            $btnCTA   = 'bg-accent text-ink shadow-hard-yellow hover:bg-accent-light';
-        } else {
-            $fondBanniere = 'bg-pale';
-            $badgeStt = 'bg-ink text-white border border-ink';
-            $btnCTA   = 'bg-primary text-white shadow-hard-ink hover:bg-primary-light';
-        }
 
-        // Si l'image existe, le fond est sombre
-        if ($hasImg) {
-            $fondBanniere = 'bg-ink';
-        }
-        ?>
+        <!-- Carte 1 : Street Fighter -->
         <div class="border-2 border-primary shadow-hard-ink bg-offwhite flex flex-col justify-between overflow-hidden">
-            <!-- Banniere avec Artwork ou Filigrane -->
-            <div class="relative h-44 overflow-hidden border-b-2 border-primary <?= $fondBanniere ?>">
-                <?php if ($hasImg) { ?>
-                    <img src="<?= $t['img'] ?>" alt="<?= htmlspecialchars($t['nom']) ?>" class="w-full h-full object-cover object-top opacity-85">
-                    <div class="absolute inset-0 bg-ink bg-opacity-20 pointer-events-none"></div>
-                <?php } else { ?>
-                    <span class="absolute right-2 top-1/2 -translate-y-1/2 font-condensed font-bold leading-none select-none pointer-events-none text-ink opacity-10 text-watermark-sm">
-                        <?= htmlspecialchars($t['initiales']) ?>
-                    </span>
-                <?php } ?>
-
-                <!-- Badges superieurs -->
+            <div class="relative h-44 overflow-hidden border-b-2 border-primary bg-ink">
+                <img src="assets/img/areix.webp" alt="Street Fighter" class="w-full h-full object-cover object-top opacity-85">
+                <div class="absolute inset-0 bg-ink bg-opacity-20 pointer-events-none"></div>
                 <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
-                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 <?= $badgeStt ?>">
-                        <?= $t['statut'] === 'ouvert' ? 'OUVERT' : 'COMPLET' ?>
-                    </span>
-                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-offwhite text-ink border border-primary">
-                        <?= htmlspecialchars($t['jeu']) ?>
-                    </span>
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-primary text-white border border-primary">OUVERT</span>
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-offwhite text-ink border border-primary">JEU DE COMBAT</span>
                 </div>
-
-                <!-- Titre pose sur bandeau de la charte -->
                 <div class="absolute bottom-3 left-3 z-10">
                     <div class="bg-offwhite border-2 border-primary px-3 py-1 shadow-hard-ink inline-block">
-                        <h3 class="font-condensed text-2xl font-bold uppercase text-ink leading-tight">
-                            <?= htmlspecialchars($t['nom']) ?>
-                        </h3>
+                        <h3 class="font-condensed text-2xl font-bold uppercase text-ink leading-tight">Street Fighter</h3>
                     </div>
                 </div>
             </div>
-
-            <!-- Infos compactes et bouton CTA -->
             <div class="p-5 bg-offwhite flex flex-col justify-between flex-1">
                 <div class="grid grid-cols-2 gap-3 mb-4 border-b border-primary pb-3">
                     <div>
                         <div class="font-mono text-xs text-muted uppercase tracking-widest mb-0.5">DATE</div>
-                        <div class="font-condensed text-lg font-bold text-ink"><?= htmlspecialchars($t['date']) ?></div>
+                        <div class="font-condensed text-lg font-bold text-ink">14.12.2026</div>
                     </div>
                     <div>
                         <div class="font-mono text-xs text-muted uppercase tracking-widest mb-0.5">COUT</div>
-                        <div class="font-condensed text-lg font-bold text-primary"><?= (int)$t['cout'] ?> CREDITS</div>
+                        <div class="font-condensed text-lg font-bold text-primary">120 CREDITS</div>
                     </div>
                 </div>
                 <div>
-                    <?php if ($t['statut'] === 'ouvert') { ?>
-                        <a href="index.php?page=tournois" class="block w-full text-center font-condensed font-bold text-sm uppercase py-2 <?= $btnCTA ?>">
-                            PARTICIPER →
-                        </a>
-                    <?php } else { ?>
-                        <span class="block w-full text-center font-condensed font-bold text-sm uppercase border-2 border-ink text-ink bg-pale py-2">
-                            COMPLET
-                        </span>
-                    <?php } ?>
+                    <a href="index.php?page=tournois" class="block w-full text-center font-condensed font-bold text-sm uppercase py-2 bg-primary text-white shadow-hard-ink hover:bg-primary-light">
+                        PARTICIPER →
+                    </a>
                 </div>
             </div>
         </div>
-        <?php } ?>
+
+        <!-- Carte 2 : GTA VI -->
+        <div class="border-2 border-primary shadow-hard-ink bg-offwhite flex flex-col justify-between overflow-hidden">
+            <div class="relative h-44 overflow-hidden border-b-2 border-primary bg-ink">
+                <img src="assets/img/ar6i4r.webp" alt="GTA VI" class="w-full h-full object-cover object-top opacity-85">
+                <div class="absolute inset-0 bg-ink bg-opacity-20 pointer-events-none"></div>
+                <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-accent text-ink border border-accent">OUVERT</span>
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-offwhite text-ink border border-primary">ACTION / MONDE OUVERT</span>
+                </div>
+                <div class="absolute bottom-3 left-3 z-10">
+                    <div class="bg-offwhite border-2 border-primary px-3 py-1 shadow-hard-ink inline-block">
+                        <h3 class="font-condensed text-2xl font-bold uppercase text-ink leading-tight">GTA VI</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 bg-offwhite flex flex-col justify-between flex-1">
+                <div class="grid grid-cols-2 gap-3 mb-4 border-b border-primary pb-3">
+                    <div>
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-0.5">DATE</div>
+                        <div class="font-condensed text-lg font-bold text-ink">20.12.2026</div>
+                    </div>
+                    <div>
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-0.5">COUT</div>
+                        <div class="font-condensed text-lg font-bold text-primary">80 CREDITS</div>
+                    </div>
+                </div>
+                <div>
+                    <a href="index.php?page=tournois" class="block w-full text-center font-condensed font-bold text-sm uppercase py-2 bg-accent text-ink shadow-hard-yellow hover:bg-accent-light">
+                        PARTICIPER →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte 3 : Dragon Ball FighterZ -->
+        <div class="border-2 border-primary shadow-hard-ink bg-offwhite flex flex-col justify-between overflow-hidden">
+            <div class="relative h-44 overflow-hidden border-b-2 border-primary bg-ink">
+                <img src="assets/img/scpuyg.webp" alt="Dragon Ball FighterZ" class="w-full h-full object-cover object-top opacity-85">
+                <div class="absolute inset-0 bg-ink bg-opacity-20 pointer-events-none"></div>
+                <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-ink text-white border border-ink">COMPLET</span>
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-offwhite text-ink border border-primary">JEU DE COMBAT</span>
+                </div>
+                <div class="absolute bottom-3 left-3 z-10">
+                    <div class="bg-offwhite border-2 border-primary px-3 py-1 shadow-hard-ink inline-block">
+                        <h3 class="font-condensed text-2xl font-bold uppercase text-ink leading-tight">Dragon Ball FighterZ</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 bg-offwhite flex flex-col justify-between flex-1">
+                <div class="grid grid-cols-2 gap-3 mb-4 border-b border-primary pb-3">
+                    <div>
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-0.5">DATE</div>
+                        <div class="font-condensed text-lg font-bold text-ink">05.01.2027</div>
+                    </div>
+                    <div>
+                        <div class="font-mono text-xs text-muted uppercase tracking-widest mb-0.5">COUT</div>
+                        <div class="font-condensed text-lg font-bold text-primary">100 CREDITS</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="block w-full text-center font-condensed font-bold text-sm uppercase border-2 border-ink text-ink bg-pale py-2">
+                        COMPLET
+                    </span>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
 <!-- ===== SECTION STATISTIQUES ===== -->
 <section class="border-y-2 border-primary">
     <div class="max-w-container mx-auto px-8">
+        <!-- Tableau des statistiques globales de la plateforme (donnees factices) -->
         <div class="grid grid-cols-3 divide-x divide-primary">
-            <?php
-            $stats = [
-                ['valeur' => '1 200', 'label' => 'JOUEURS INSCRITS'],
-                ['valeur' => '350',   'label' => 'TOURNOIS ORGANISES'],
-                ['valeur' => '5',     'label' => 'JEUX CAPCOM DISPONIBLES'],
-            ];
-            foreach ($stats as $s) {
-            ?>
             <div class="py-12 text-center">
-                <div class="font-condensed font-bold text-ink leading-none mb-2 text-title-1"><?= $s['valeur'] ?></div>
-                <div class="font-mono text-xs text-muted uppercase tracking-widest"><?= $s['label'] ?></div>
+                <div class="font-condensed font-bold text-ink leading-none mb-2 text-title-1">1 200</div>
+                <div class="font-mono text-xs text-muted uppercase tracking-widest">JOUEURS INSCRITS</div>
             </div>
-            <?php } ?>
+            <div class="py-12 text-center">
+                <div class="font-condensed font-bold text-ink leading-none mb-2 text-title-1">350</div>
+                <div class="font-mono text-xs text-muted uppercase tracking-widest">TOURNOIS ORGANISES</div>
+            </div>
+            <div class="py-12 text-center">
+                <div class="font-condensed font-bold text-ink leading-none mb-2 text-title-1">5</div>
+                <div class="font-mono text-xs text-muted uppercase tracking-widest">JEUX CAPCOM DISPONIBLES</div>
+            </div>
         </div>
     </div>
 </section>
@@ -261,21 +291,26 @@ $tournoisMis = $modelTournoi->selectALaUne();
 
     <!-- Onglets filtres -->
     <div class="flex gap-2 mb-6 flex-wrap">
-        <?php $onglets = ['CAPCOM', 'PLATEFORMES', 'SPONSORS', 'MEDIAS', 'EVENEMENTS']; ?>
-        <?php foreach ($onglets as $i => $onglet) { ?>
-        <button class="tab-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary cursor-pointer <?= $i === 0 ? 'bg-primary text-white' : 'text-ink hover:bg-primary hover:text-white' ?>">
-            <?= $onglet ?>
-        </button>
-        <?php } ?>
+        <button class="tab-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary cursor-pointer bg-primary text-white">CAPCOM</button>
+        <button class="tab-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary cursor-pointer text-ink hover:bg-primary hover:text-white">PLATEFORMES</button>
+        <button class="tab-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary cursor-pointer text-ink hover:bg-primary hover:text-white">SPONSORS</button>
+        <button class="tab-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary cursor-pointer text-ink hover:bg-primary hover:text-white">MEDIAS</button>
+        <button class="tab-btn font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary cursor-pointer text-ink hover:bg-primary hover:text-white">EVENEMENTS</button>
     </div>
 
-    <!-- Logos partenaires (placeholders) -->
+    <!-- Grille des logos partenaires (donnees factices) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <?php $partenaires = ['CAPCOM', 'STEAM', 'TWITCH', 'ESL']; ?>
-        <?php foreach ($partenaires as $p) { ?>
         <div class="border border-primary p-10 flex items-center justify-center bg-pale">
-            <span class="font-condensed font-bold text-2xl text-muted uppercase tracking-widest"><?= $p ?></span>
+            <span class="font-condensed font-bold text-2xl text-muted uppercase tracking-widest">CAPCOM</span>
         </div>
-        <?php } ?>
+        <div class="border border-primary p-10 flex items-center justify-center bg-pale">
+            <span class="font-condensed font-bold text-2xl text-muted uppercase tracking-widest">STEAM</span>
+        </div>
+        <div class="border border-primary p-10 flex items-center justify-center bg-pale">
+            <span class="font-condensed font-bold text-2xl text-muted uppercase tracking-widest">TWITCH</span>
+        </div>
+        <div class="border border-primary p-10 flex items-center justify-center bg-pale">
+            <span class="font-condensed font-bold text-2xl text-muted uppercase tracking-widest">ESL</span>
+        </div>
     </div>
 </section>

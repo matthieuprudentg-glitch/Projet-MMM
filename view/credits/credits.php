@@ -1,27 +1,3 @@
-<?php
-include('model/packCredit.php');
-include('model/utilisateur.php');
-
-$modelPack = new PackCredit();
-$modelUtilisateur = new Utilisateur();
-
-$packs = $modelPack->selectAll();
-$joueur = $modelUtilisateur->selectProfil();
-
-// Solde actuel : celui de la session apres un achat, sinon celui du profil
-$solde = $joueur['credits'];
-if (isset($_SESSION['solde_credits'])) {
-    $solde = $_SESSION['solde_credits'];
-}
-
-// Pack choisi dans l'URL (le pack JOUEUR par defaut)
-$idPackChoisi = 2;
-if (isset($_GET['pack'])) {
-    $idPackChoisi = (int)$_GET['pack'];
-}
-$packChoisi = $modelPack->selectById($idPackChoisi);
-?>
-
 <!-- Page achat de credits -->
 <div class="max-w-container mx-auto px-8 py-12">
 
@@ -39,7 +15,7 @@ $packChoisi = $modelPack->selectById($idPackChoisi);
         <div class="col-span-12 lg:col-span-4">
             <div class="border-2 border-primary p-5 shadow-hard-blue">
                 <div class="font-mono text-xs text-muted uppercase tracking-widest mb-1">SOLDE ACTUEL</div>
-                <div class="font-condensed font-bold text-ink leading-none text-title-1"><?= (int)$solde ?></div>
+                <div class="font-condensed font-bold text-ink leading-none text-title-1">120</div>
                 <div class="font-mono text-xs text-muted uppercase">CREDITS</div>
             </div>
         </div>
@@ -59,60 +35,92 @@ $packChoisi = $modelPack->selectById($idPackChoisi);
     <!-- Section 01 : Choix du pack -->
     <?php $num = '01'; $titre = 'CHOISIS TON PACK'; $ref = 'REF : CRD-04'; include('view/commun/titre_section.php'); ?>
 
+    <!-- Grille des packs de credits disponibles (donnees factices a remplacer par la BDD) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        <?php foreach ($packs as $pack) { ?>
-        <?php $estChoisi = $packChoisi && $packChoisi['id'] === $pack['id']; ?>
-        <div class="border-2 <?= $estChoisi ? 'border-primary shadow-hard-blue' : 'border-primary' ?> p-5 bg-offwhite relative">
-            <!-- Badge pack ou populaire -->
+
+        <!-- Pack Starter -->
+        <div class="border-2 border-primary p-5 bg-offwhite relative">
             <div class="mb-4">
-                <?php if ($pack['populaire']) { ?>
-                    <?php $texte = 'POPULAIRE'; $type = 'jaune'; include('view/commun/badge.php'); ?>
-                <?php } else { ?>
-                    <?php $texte = 'PACK'; $type = 'contour'; include('view/commun/badge.php'); ?>
-                <?php } ?>
+                <?php $texte = 'PACK'; $type = 'contour'; include('view/commun/badge.php'); ?>
             </div>
-            <!-- Nom du pack -->
-            <div class="font-condensed text-2xl font-bold text-ink uppercase mb-1"><?= htmlspecialchars($pack['nom']) ?></div>
-            <!-- Nombre de credits -->
-            <div class="font-condensed font-bold text-ink leading-none mb-1 text-6xl"><?= (int)$pack['credits'] ?></div>
+            <div class="font-condensed text-2xl font-bold text-ink uppercase mb-1">STARTER</div>
+            <div class="font-condensed font-bold text-ink leading-none mb-1 text-6xl">50</div>
             <div class="font-mono text-xs text-muted uppercase tracking-widest mb-3">CREDITS</div>
-            <!-- Prix -->
-            <div class="font-condensed text-2xl font-bold text-ink mb-5"><?= (int)$pack['prix'] ?> €</div>
-            <!-- Bouton choisir -->
-            <a href="index.php?page=credits&pack=<?= (int)$pack['id'] ?>"
-               class="block w-full text-center font-condensed font-bold text-sm uppercase py-3 <?= $pack['populaire'] ? 'bg-accent text-ink shadow-hard-ink hover:bg-accent-light' : 'bg-primary text-white shadow-hard-ink hover:bg-primary-light' ?>">
+            <div class="font-condensed text-2xl font-bold text-ink mb-5">5 €</div>
+            <a href="index.php?page=credits&pack=1" class="block w-full text-center font-condensed font-bold text-sm uppercase py-3 bg-primary text-white shadow-hard-ink hover:bg-primary-light">
                 CHOISIR →
             </a>
         </div>
-        <?php } ?>
+
+        <!-- Pack Joueur -->
+        <div class="border-2 border-primary shadow-hard-blue p-5 bg-offwhite relative">
+            <div class="mb-4">
+                <?php $texte = 'POPULAIRE'; $type = 'jaune'; include('view/commun/badge.php'); ?>
+            </div>
+            <div class="font-condensed text-2xl font-bold text-ink uppercase mb-1">JOUEUR</div>
+            <div class="font-condensed font-bold text-ink leading-none mb-1 text-6xl">120</div>
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-3">CREDITS</div>
+            <div class="font-condensed text-2xl font-bold text-ink mb-5">10 €</div>
+            <a href="index.php?page=credits&pack=2" class="block w-full text-center font-condensed font-bold text-sm uppercase py-3 bg-accent text-ink shadow-hard-ink hover:bg-accent-light">
+                CHOISIR →
+            </a>
+        </div>
+
+        <!-- Pack Pro -->
+        <div class="border-2 border-primary p-5 bg-offwhite relative">
+            <div class="mb-4">
+                <?php $texte = 'PACK'; $type = 'contour'; include('view/commun/badge.php'); ?>
+            </div>
+            <div class="font-condensed text-2xl font-bold text-ink uppercase mb-1">PRO</div>
+            <div class="font-condensed font-bold text-ink leading-none mb-1 text-6xl">300</div>
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-3">CREDITS</div>
+            <div class="font-condensed text-2xl font-bold text-ink mb-5">22 €</div>
+            <a href="index.php?page=credits&pack=3" class="block w-full text-center font-condensed font-bold text-sm uppercase py-3 bg-primary text-white shadow-hard-ink hover:bg-primary-light">
+                CHOISIR →
+            </a>
+        </div>
+
+        <!-- Pack Ultime -->
+        <div class="border-2 border-primary p-5 bg-offwhite relative">
+            <div class="mb-4">
+                <?php $texte = 'PACK'; $type = 'contour'; include('view/commun/badge.php'); ?>
+            </div>
+            <div class="font-condensed text-2xl font-bold text-ink uppercase mb-1">ULTIME</div>
+            <div class="font-condensed font-bold text-ink leading-none mb-1 text-6xl">700</div>
+            <div class="font-mono text-xs text-muted uppercase tracking-widest mb-3">CREDITS</div>
+            <div class="font-condensed text-2xl font-bold text-ink mb-5">45 €</div>
+            <a href="index.php?page=credits&pack=4" class="block w-full text-center font-condensed font-bold text-sm uppercase py-3 bg-primary text-white shadow-hard-ink hover:bg-primary-light">
+                CHOISIR →
+            </a>
+        </div>
+
     </div>
 
     <!-- Section 02 : Paiement -->
     <?php $num = '02'; $titre = 'PAIEMENT'; $ref = 'REF : CRD-06'; include('view/commun/titre_section.php'); ?>
 
-    <?php if ($packChoisi) { ?>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <!-- Recapitulatif -->
+        <!-- Tableau recapitulatif du pack choisi et du nouveau solde (donnees factices) -->
         <div class="border border-primary p-6 shadow-hard-blue">
             <div class="font-mono text-xs text-primary uppercase tracking-widest mb-5 pb-3 border-b border-primary">RECAPITULATIF</div>
-            <?php
-            $lignes = [
-                ['label' => 'PACK',          'valeur' => $packChoisi['nom'] . ' / ' . $packChoisi['credits'] . ' credits', 'grand' => false],
-                ['label' => 'PRIX',          'valeur' => $packChoisi['prix'] . ' €',                                        'grand' => false],
-                ['label' => 'SOLDE ACTUEL',  'valeur' => $solde . ' credits',                                                 'grand' => false],
-                ['label' => 'NOUVEAU SOLDE', 'valeur' => ($solde + $packChoisi['credits']) . ' CREDITS',                      'grand' => true],
-            ];
-            ?>
             <div class="space-y-3">
-                <?php foreach ($lignes as $l) { ?>
-                <div class="flex justify-between items-baseline py-2 border-b border-primary last:border-b-0 last:pt-3">
-                    <span class="font-mono text-xs text-muted uppercase tracking-widest"><?= htmlspecialchars($l['label']) ?></span>
-                    <span class="<?= $l['grand'] ? 'font-condensed text-4xl font-bold text-ink' : 'font-mono text-sm text-ink' ?>">
-                        <?= htmlspecialchars($l['valeur']) ?>
-                    </span>
+                <div class="flex justify-between items-baseline py-2 border-b border-primary">
+                    <span class="font-mono text-xs text-muted uppercase tracking-widest">PACK</span>
+                    <span class="font-mono text-sm text-ink">JOUEUR / 120 credits</span>
                 </div>
-                <?php } ?>
+                <div class="flex justify-between items-baseline py-2 border-b border-primary">
+                    <span class="font-mono text-xs text-muted uppercase tracking-widest">PRIX</span>
+                    <span class="font-mono text-sm text-ink">10 €</span>
+                </div>
+                <div class="flex justify-between items-baseline py-2 border-b border-primary">
+                    <span class="font-mono text-xs text-muted uppercase tracking-widest">SOLDE ACTUEL</span>
+                    <span class="font-mono text-sm text-ink">120 credits</span>
+                </div>
+                <div class="flex justify-between items-baseline py-2 pt-3">
+                    <span class="font-mono text-xs text-muted uppercase tracking-widest">NOUVEAU SOLDE</span>
+                    <span class="font-condensed text-4xl font-bold text-ink">240 CREDITS</span>
+                </div>
             </div>
         </div>
 
@@ -121,7 +129,7 @@ $packChoisi = $modelPack->selectById($idPackChoisi);
             <div class="font-mono text-xs text-primary uppercase tracking-widest mb-5 pb-3 border-b border-primary">MODE DE PAIEMENT</div>
             <form action="controller/credits/creditController.php" method="POST" class="space-y-5">
                 <input type="hidden" name="action" value="acheter">
-                <input type="hidden" name="pack_id" value="<?= (int)$packChoisi['id'] ?>">
+                <input type="hidden" name="pack_id" value="2">
                 <!-- Choix du moyen de paiement -->
                 <div class="space-y-3">
                     <label class="flex items-center gap-3 cursor-pointer">
@@ -151,10 +159,5 @@ $packChoisi = $modelPack->selectById($idPackChoisi);
         </div>
 
     </div>
-    <?php } else { ?>
-    <div class="border border-primary p-10 text-center bg-pale">
-        <p class="font-condensed text-2xl text-muted uppercase">Selectionnez un pack ci-dessus pour continuer.</p>
-    </div>
-    <?php } ?>
 
 </div>

@@ -1,28 +1,3 @@
-<?php
-include('model/partenaire.php');
-
-$modelPartenaire = new Partenaire();
-
-// Categorie choisie dans l'URL (TOUS par defaut)
-$categorieActive = 'TOUS';
-if (isset($_GET['cat'])) {
-    $categorieActive = strtoupper($_GET['cat']);
-}
-
-$tousPartenaires = $modelPartenaire->selectAll();
-$partenaires = $modelPartenaire->filtrer($tousPartenaires, $categorieActive);
-
-// Onglets de filtre : code de la categorie => texte affiche
-$categories = [
-    'TOUS'        => 'Tous (' . count($tousPartenaires) . ')',
-    'CAPCOM'      => 'Capcom',
-    'PLATEFORMES' => 'Plateformes',
-    'MEDIAS'      => 'Medias',
-    'EVENEMENTS'  => 'Evenements',
-    'SPONSORS'    => 'Sponsors',
-];
-?>
-
 <!-- Page Partenaires Officiels -->
 <div class="max-w-container mx-auto px-8 py-12">
 
@@ -36,7 +11,7 @@ $categories = [
                 Ecosysteme des editeurs, plateformes et organisateurs accredites sous protocole officiel Capcom et MMM.
             </p>
         </div>
-        <!-- Stats encadrees -->
+        <!-- Tableau resume des chiffres partenaires (donnees factices) -->
         <div class="col-span-12 lg:col-span-5">
             <div class="border border-primary p-5 shadow-hard-blue bg-pale">
                 <div class="grid grid-cols-3 gap-4">
@@ -73,88 +48,125 @@ $categories = [
 
     <!-- Onglets filtres -->
     <div class="flex gap-2 mb-8 flex-wrap">
-        <?php foreach ($categories as $cle => $libelle) { ?>
-        <?php $estActif = ($categorieActive === $cle); ?>
-        <a href="index.php?page=partenaires&cat=<?= urlencode($cle) ?>"
-           class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary <?= $estActif ? 'bg-primary text-white font-bold' : 'text-ink bg-offwhite hover:bg-pale' ?>">
-            <?= htmlspecialchars($libelle) ?>
-        </a>
-        <?php } ?>
+        <a href="index.php?page=partenaires&cat=TOUS" class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary bg-primary text-white font-bold">Tous (6)</a>
+        <a href="index.php?page=partenaires&cat=CAPCOM" class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary text-ink bg-offwhite hover:bg-pale">Capcom</a>
+        <a href="index.php?page=partenaires&cat=PLATEFORMES" class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary text-ink bg-offwhite hover:bg-pale">Plateformes</a>
+        <a href="index.php?page=partenaires&cat=MEDIAS" class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary text-ink bg-offwhite hover:bg-pale">Medias</a>
+        <a href="index.php?page=partenaires&cat=EVENEMENTS" class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary text-ink bg-offwhite hover:bg-pale">Evenements</a>
+        <a href="index.php?page=partenaires&cat=SPONSORS" class="font-mono text-xs uppercase tracking-widest px-4 py-2 border border-primary text-ink bg-offwhite hover:bg-pale">Sponsors</a>
     </div>
 
-    <!-- Grille des partenaires -->
+    <!-- Grille des partenaires officiels (donnees factices a remplacer par la BDD) -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <?php foreach ($partenaires as $p) { ?>
-        <?php
-        if ($p['couleur'] === 'jaune') {
-            $bgCard   = 'bg-accent';
-            $txtMain  = 'text-ink';
-            $txtSub   = 'text-ink opacity-70';
-            $filTxt   = 'text-ink';
-            $badgeCat = 'bg-ink text-white border border-ink';
-            $badgeStt = 'border border-ink text-ink font-bold';
-        } elseif ($p['couleur'] === 'bleu') {
-            $bgCard   = 'bg-primary';
-            $txtMain  = 'text-white';
-            $txtSub   = 'text-white opacity-70';
-            $filTxt   = 'text-white';
-            $badgeCat = 'bg-accent text-ink border border-accent';
-            $badgeStt = 'border border-white text-white font-bold';
-        } else {
-            $bgCard   = 'bg-offwhite';
-            $txtMain  = 'text-ink';
-            $txtSub   = 'text-muted';
-            $filTxt   = 'text-ink';
-            $badgeCat = 'bg-primary text-white border border-primary';
-            $badgeStt = 'border border-primary text-primary font-bold';
-        }
-        ?>
-        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between <?= $bgCard ?>">
 
-            <!-- Sigle en filigrane -->
-            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none <?= $filTxt ?> opacity-10 text-watermark-sm z-0">
-                <?= htmlspecialchars($p['sigle']) ?>
-            </span>
-
+        <!-- Partenaire 1 : Capcom -->
+        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between bg-accent">
+            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none text-ink opacity-10 text-watermark-sm z-0">CAPCOM</span>
             <div class="relative z-10">
-                <!-- Badges code et categorie -->
                 <div class="flex items-center justify-between gap-2 mb-4">
-                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 <?= $badgeCat ?>">
-                        <?= htmlspecialchars($p['categorie']) ?>
-                    </span>
-                    <span class="font-mono text-xs uppercase tracking-widest <?= $txtSub ?>">
-                        <?= htmlspecialchars($p['code']) ?>
-                    </span>
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-ink text-white border border-ink">CAPCOM</span>
+                    <span class="font-mono text-xs uppercase tracking-widest text-ink opacity-70">PTN-CAP-01</span>
                 </div>
-
-                <!-- Nom de la structure -->
-                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 <?= $txtMain ?>">
-                    <?= htmlspecialchars($p['nom']) ?>
-                </h3>
-
-                <!-- Role technique -->
-                <div class="font-mono text-xs uppercase tracking-widest mb-3 <?= $txtSub ?>">
-                    <?= htmlspecialchars($p['role']) ?>
-                </div>
-
-                <!-- Description -->
-                <p class="text-sm leading-relaxed mb-6 <?= $txtMain ?>">
-                    <?= htmlspecialchars($p['description']) ?>
-                </p>
+                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 text-ink">Capcom Co., Ltd.</h3>
+                <div class="font-mono text-xs uppercase tracking-widest mb-3 text-ink opacity-70">Editeur et titulaire des licences</div>
+                <p class="text-sm leading-relaxed mb-6 text-ink">Fournisseur exclusif des licences Street Fighter, Monster Hunter, Resident Evil, Devil May Cry et Mega Man.</p>
             </div>
-
-            <!-- Pied de carte -->
             <div class="relative z-10 pt-4 border-t border-current border-opacity-20 flex items-center justify-between">
-                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 <?= $badgeStt ?>">
-                    <?= htmlspecialchars($p['statut']) ?>
-                </span>
-                <span class="font-mono text-xs uppercase tracking-widest <?= $txtSub ?>">
-                    DEPUIS <?= htmlspecialchars($p['depuis']) ?>
-                </span>
+                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-ink text-ink font-bold">TITULAIRE OFFICIEL</span>
+                <span class="font-mono text-xs uppercase tracking-widest text-ink opacity-70">DEPUIS 2024</span>
             </div>
-
         </div>
-        <?php } ?>
+
+        <!-- Partenaire 2 : Steam -->
+        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between bg-primary">
+            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none text-white opacity-10 text-watermark-sm z-0">STEAM</span>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between gap-2 mb-4">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-accent text-ink border border-accent">PLATEFORMES</span>
+                    <span class="font-mono text-xs uppercase tracking-widest text-white opacity-70">PTN-STM-02</span>
+                </div>
+                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 text-white">Steam / Valve Corporation</h3>
+                <div class="font-mono text-xs uppercase tracking-widest mb-3 text-white opacity-70">Distribution PC et serveurs de match</div>
+                <p class="text-sm leading-relaxed mb-6 text-white">Infrastructure de serveurs dediee pour les matchs homologues et synchronisation des identifiants joueurs.</p>
+            </div>
+            <div class="relative z-10 pt-4 border-t border-current border-opacity-20 flex items-center justify-between">
+                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-white text-white font-bold">SERVEURS DEDIES</span>
+                <span class="font-mono text-xs uppercase tracking-widest text-white opacity-70">DEPUIS 2025</span>
+            </div>
+        </div>
+
+        <!-- Partenaire 3 : Twitch -->
+        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between bg-offwhite">
+            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none text-ink opacity-10 text-watermark-sm z-0">TWITCH</span>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between gap-2 mb-4">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-primary text-white border border-primary">MEDIAS</span>
+                    <span class="font-mono text-xs uppercase tracking-widest text-muted">PTN-TWH-03</span>
+                </div>
+                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 text-ink">Twitch Interactive</h3>
+                <div class="font-mono text-xs uppercase tracking-widest mb-3 text-muted">Diffusion officielle et flux multi-angles</div>
+                <p class="text-sm leading-relaxed mb-6 text-ink">Retransmission en direct des finales des tournois majeurs avec integration du chat et des alertes de match.</p>
+            </div>
+            <div class="relative z-10 pt-4 border-t border-current border-opacity-20 flex items-center justify-between">
+                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-primary text-primary font-bold">DIFFUSION OFFICIELLE</span>
+                <span class="font-mono text-xs uppercase tracking-widest text-muted">DEPUIS 2025</span>
+            </div>
+        </div>
+
+        <!-- Partenaire 4 : ESL -->
+        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between bg-accent">
+            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none text-ink opacity-10 text-watermark-sm z-0">ESL</span>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between gap-2 mb-4">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-ink text-white border border-ink">EVENEMENTS</span>
+                    <span class="font-mono text-xs uppercase tracking-widest text-ink opacity-70">PTN-ESL-04</span>
+                </div>
+                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 text-ink">ESL Gaming Network</h3>
+                <div class="font-mono text-xs uppercase tracking-widest mb-3 text-ink opacity-70">Circuits officiels et arbitrage federal</div>
+                <p class="text-sm leading-relaxed mb-6 text-ink">Homologation des reglements sportifs, formation des arbitres officiels et certification des scores.</p>
+            </div>
+            <div class="relative z-10 pt-4 border-t border-current border-opacity-20 flex items-center justify-between">
+                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-ink text-ink font-bold">ARBITRAGE HOMOLOGUE</span>
+                <span class="font-mono text-xs uppercase tracking-widest text-ink opacity-70">DEPUIS 2026</span>
+            </div>
+        </div>
+
+        <!-- Partenaire 5 : PlayStation -->
+        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between bg-primary">
+            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none text-white opacity-10 text-watermark-sm z-0">SONY PS</span>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between gap-2 mb-4">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-accent text-ink border border-accent">PLATEFORMES</span>
+                    <span class="font-mono text-xs uppercase tracking-widest text-white opacity-70">PTN-SNY-05</span>
+                </div>
+                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 text-white">PlayStation / Sony Interactive</h3>
+                <div class="font-mono text-xs uppercase tracking-widest mb-3 text-white opacity-70">Homologation tournois consoles PlayStation 5</div>
+                <p class="text-sm leading-relaxed mb-6 text-white">Support des manettes officielles et integration automatique des brackets dans le PlayStation Network.</p>
+            </div>
+            <div class="relative z-10 pt-4 border-t border-current border-opacity-20 flex items-center justify-between">
+                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-white text-white font-bold">CONSOLE HOMOLOGUEE</span>
+                <span class="font-mono text-xs uppercase tracking-widest text-white opacity-70">DEPUIS 2025</span>
+            </div>
+        </div>
+
+        <!-- Partenaire 6 : Red Bull -->
+        <div class="relative overflow-hidden border border-primary p-6 shadow-hard-ink flex flex-col justify-between bg-offwhite">
+            <span class="absolute right-3 bottom-2 font-condensed font-bold leading-none select-none pointer-events-none text-ink opacity-10 text-watermark-sm z-0">RED BULL</span>
+            <div class="relative z-10">
+                <div class="flex items-center justify-between gap-2 mb-4">
+                    <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 bg-primary text-white border border-primary">SPONSORS</span>
+                    <span class="font-mono text-xs uppercase tracking-widest text-muted">PTN-RDB-06</span>
+                </div>
+                <h3 class="font-condensed font-bold uppercase leading-tight text-3xl mb-2 text-ink">Red Bull Gaming Division</h3>
+                <div class="font-mono text-xs uppercase tracking-widest mb-3 text-muted">Dotation des cashprizes et logistique tournois physiques</div>
+                <p class="text-sm leading-relaxed mb-6 text-ink">Financement des cashprizes de tournois professionnels et organisation des etapes physiques annuelles.</p>
+            </div>
+            <div class="relative z-10 pt-4 border-t border-current border-opacity-20 flex items-center justify-between">
+                <span class="font-mono text-xs uppercase tracking-widest px-2 py-0.5 border border-primary text-primary font-bold">PARTENAIRE MAJEUR</span>
+                <span class="font-mono text-xs uppercase tracking-widest text-muted">DEPUIS 2026</span>
+            </div>
+        </div>
+
     </div>
 
     <!-- Section 02 : Candidature / Devenir partenaire -->
